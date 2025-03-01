@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
+    <style>
+        :root {
+            --primary: #4834d4;
+            --secondary: #686de0;
+            --accent: #be2edd;
+            --background: #f9f9f9;
+            --text: #2d3436;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            line-height: 1.6;
+            color: var(--text);
+            background: var(--background);
+        }
+
+        /* Animated background */
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            background: linear-gradient(45deg, #f3f4f6, #fff);
+            opacity: 0.8;
+        }
+
+        .background-animation::after {
+            content: '';
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%;
+            left: -50%;
+            background: radial-gradient(circle, rgba(72, 52, 212, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            text-align: center;
+            padding: 4rem 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .animated-title {
+            display: inline-block;
+            position: relative;
+            color: white;
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        nav {
+            background: var(--secondary);
+            padding: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s;
+            display: inline-block;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 50%;
+            background: white;
+            transition: all 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 80%;
+            left: 10%;
+        }
+
+        section {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .project-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .project-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .project-details {
+            padding: 1.5rem;
+            background: white;
+            transform: translateY(100%);
+            transition: transform 0.3s;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .project-card:hover .project-details {
+            transform: translateY(0);
+        }
+
+        .skills {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 2rem;
+        }
+
+        .skill-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+
+        .skill-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .skill-bar {
+            height: 10px;
+            background: #eee;
+            border-radius: 5px;
+            margin-top: 1rem;
+            overflow: hidden;
+        }
+
+        .skill-progress {
+            height: 100%;
+            background: var(--primary);
+            width: 0;
+            transition: width 1s ease-in-out;
+        }
+
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .contact-form input,
+        .contact-form textarea {
+            width: 100%;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            border: 2px solid #eee;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .contact-form input:focus,
+        .contact-form textarea:focus {
+            border-color: var(--primary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(72, 52, 212, 0.1);
+        }
+
+        .contact-form button {
+            background: var(--primary);
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            font-size: 1.1rem;
+        }
+
+        .contact-form button:hover {
+            background: var(--accent);
+            transform: translateY(-2px);
+        }
+
+        footer {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                display: flex;
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav a {
+                display: block;
+                margin: 0.5rem 0;
+            }
+
+            .skills {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="background-animation"></div>
+    
+    <header>
+        <div class="header-content">
+            <h1 class="animated-title">Krishna Chourasia</h1>
+            <p class="animated-title" style="animation-delay: 0.2s;">Web Developer & Designer</p>
+        </div>
+    </header>
+
+    <nav>
+        <a href="#about">About</a>
+        <a href="#projects">Projects</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
+    </nav>
+
+    <section id="about" data-aos="fade-up">
+        <h2>About Me</h2>
+        <p> Hello! My name is Krishna Chourasia, and I am currently pursuing a Master of Computer Applications (MCA) at Shri Ram Institute of Technology. </p>
+        <p> I have a strong passion for technology and enjoy exploring innovative solutions to real-world problems.  
+            
+            I specialize in web development and love creating dynamic, user-friendly websites and applications. My goal is to become a software developer, 
+            where I can apply my knowledge and creativity to build impactful software solutions. I am always eager to learn new technologies and improve my skills to stay ahead in the ever-evolving tech world. </p> 
+            
+            <p>Let’s connect and create something amazing together!  </p>
+    </section>
+
+    <section id="projects" data-aos="fade-up">
+        <h2>My Projects</h2>
+        <div class="skills">
+            <div class="project-card" data-aos="fade-up">
+                <img src="/Docs/Picsart_23-11-28_22-23-24-346.jpg" alt="Project 1">
+                <div class="project-details">
+                    <h3>Project 1</h3>
+                    <p>Description of project 1</p>
+                </div>
+            </div>
+            <div class="project-card" data-aos="fade-up" data-aos-delay="100">
+                <img src="/Docs/Sharc.png" alt="Project 2">
+                <div class="project-details">
+                    <h3>Project 2</h3>
+                    <p>Description of project 2</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="skills" data-aos="fade-up">
+        <h2>Skills</h2>
+        <div class="skills">
+            <div class="skill-card">
+                <h3>Web Development</h3>
+                <div class="skill-bar">
+                    <div class="skill-progress" data-progress="90"></div>
+                </div>
+            </div>
+            <div class="skill-card">
+                <h3>UI/UX Design</h3>
+                <div class="skill-bar">
+                    <div class="skill-progress" data-progress="85"></div>
+                </div>
+            </div>
+            <div class="skill-card">
+                <h3>Mobile Development</h3>
+                <div class="skill-bar">
+                    <div class="skill-progress" data-progress="75"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" data-aos="fade-up">
+        <h2>Contact Me</h2>
+        <form class="contact-form" id="contactForm">
+            <input type="text" placeholder="Your Name" required>
+            <input type="email" placeholder="Your Email" required>
+            <textarea placeholder="Your Message" rows="5" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+    </section>
+
+    <footer>
+        <p>© 2025 krishna_chourasia. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true
+        });
+
+        // Smooth scroll
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const section = document.querySelector(this.getAttribute('href'));
+                section.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Animate skill bars when they come into view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const progressBars = entry.target.querySelectorAll('.skill-progress');
+                    progressBars.forEach(bar => {
+                        const progress = bar.getAttribute('data-progress');
+                        bar.style.width = `${progress}%`;
+                    });
+                }
+            });
+        });
+
+        document.querySelectorAll('.skill-card').forEach(card => {
+            observer.observe(card);
+        });
+
+        // Form submission animation
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const button = this.querySelector('button');
+            button.textContent = 'Message Sent! ✓';
+            button.style.background = '#6c5ce7';
+            
+            setTimeout(() => {
+                button.textContent = 'Send Message';
+                button.style.background = '';
+                this.reset();
+            }, 2000);
+        });
+    </script>
+</body>
+</html>
